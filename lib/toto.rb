@@ -125,7 +125,7 @@ module Toto
         http 400
       end
 
-    rescue Errno::ENOENT => e
+    rescue Errno::ENOENT
       return :body => http(404).first, :type => :html, :status => 404
     else
       return :body => body || "", :type => type, :status => status || 200
@@ -193,7 +193,7 @@ module Toto
     def readme
       markdown open(README %
         [@config[:github][:user], self[:name], @config[:github][:ext]]).read
-    rescue Timeout::Error, OpenURI::HTTPError => e
+    rescue Timeout::Error, OpenURI::HTTPError
       "This page isn't available."
     end
     alias :content readme
@@ -339,7 +339,7 @@ module Toto
 
       @response.body = [response[:body]]
       @response['Content-Length'] = response[:body].bytesize.to_s unless response[:body].empty?
-      @response['Content-Type']   = Rack::Mime.mime_type(".#{response[:type]}")
+      @response['Content-Type'] = Rack::Mime.mime_type(".#{response[:type]}")
 
       # Set http cache headers
       @response['Cache-Control'] = if Toto.env == 'production'
